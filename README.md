@@ -1,46 +1,75 @@
-# Getting Started with Create React App
+# IFC Viewer
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+React TypeScript приложение для просмотра IFC файлов с использованием Three.js Fiber и WebIFC.
 
-## Available Scripts
+## Возможности
 
-In the project directory, you can run:
+- 📁 Загрузка IFC файлов с локальной машины
+- 🎯 Drag & Drop интерфейс для удобной загрузки
+- 🏗️ Обработка IFC файлов с помощью WebIFC
+- 🎨 3D визуализация с использованием React Three Fiber
+- 📊 Отображение информации о модели
+- 📱 Адаптивный дизайн
 
-### `npm start`
+## Технологии
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+- **React 18** с TypeScript
+- **React Three Fiber** для 3D рендеринга
+- **WebIFC** для обработки IFC файлов
+- **Three.js** для 3D графики
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## Установка и запуск
 
-### `npm test`
+### 1. Установка зависимостей
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```bash
+yarn install
+```
 
-### `npm run build`
+### 2. Запуск
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```bash
+yarn start
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Использование
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+1. **Запуск**: Запустите приложение командой `yarn start`
+2. **Просмотр**: Откройте http://localhost:3000 в браузере
+3. **Загрузка файла**: 
+   - Перетащите IFC файл в область загрузки, или
+   - Нажмите "выберите файл" для открытия диалога выбора
+4. **3D просмотр**: Модель отобразится в 3D вьюере с возможностью:
+   - Вращения (левая кнопка мыши)
+   - Масштабирования (колесо мыши) 
+   - Панорамирования (правая кнопка мыши)
 
-### `npm run eject`
+## Структура проекта
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+```
+ifc-viewer/
+├── src/
+│   ├── components/          # Компоненты React
+│   │   ├── IFCApp.tsx      # Главный компонент
+│   │   ├── IFCModelViewer.tsx # 3D просмотрщик
+│   │   └── FileUploader.tsx # Загрузчик файлов
+│   ├── services/           # Бизнес-логика
+│   │   └── ifcService.ts   # Сервис для работы с IFC
+│   └── types/              # TypeScript типы
+│       └── ifc.types.ts    # Типы для IFC данных
+└── public/                 # Статические файлы
+```
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Поддерживаемые файлы
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+- **Формат**: .ifc файлы
+- **Максимальный размер**: 100MB
+- **Обработка**: Клиентская (в браузере)
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+## Пакетный менеджер
 
-## Learn More
+Проект использует **Yarn** в качестве пакетного менеджера. Убедитесь, что у вас установлен Yarn:
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+```bash
+npm install -g yarn
+```
