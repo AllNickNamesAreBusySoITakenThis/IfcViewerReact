@@ -11,11 +11,9 @@ export class IFCService {
             if (this.isInitialized && this.ifcApi) {
                 return; // Уже инициализировано
             }
-
+            console.log('Initializing WebIFC...');
             this.ifcApi = new WebIFC.IfcAPI();
             this.ifcApi.SetWasmPath("/", true);
-            console.log(this.ifcApi);
-            // WebIFC автоматически найдет WASM файлы
             await this.ifcApi.Init();
             this.isInitialized = true;
 
