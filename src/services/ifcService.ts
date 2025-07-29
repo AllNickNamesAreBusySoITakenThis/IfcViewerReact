@@ -1,5 +1,7 @@
 import * as WebIFC from 'web-ifc';
+import * as THREE from 'three';
 import { IFCModel, IFCGeometry } from '../types/ifc.types';
+import { RGBColorFromFloatComponents } from './serviceTools/ColorsTools';
 
 export class IFCService {
     private ifcApi: WebIFC.IfcAPI | null = null;
@@ -45,10 +47,19 @@ export class IFCService {
             }
 
             // Парсим IFC файл
-            this.modelId = this.ifcApi!.OpenModel(fileData);
+            this.modelId = this.ifcApi!.OpenModel(fileData, { COORDINATE_TO_ORIGIN: true });
 
             if (onProgress) {
                 onProgress(80); // 80% после парсинга
+            }
+
+            const ifcMeshes = this.ifcApi!.LoadAllGeometry(this.modelId);
+
+            for (let meshIndex = 0; meshIndex < ifcMeshes.size(); meshIndex++) {
+                const ifcMesh = ifcMeshes.get(meshIndex);
+                if (ifcMesh.geometries.size() > 0) {
+                    //this.ImportIfcMesh (this.modelId, ifcMesh);
+                }
             }
 
             // Получаем геометрию
@@ -67,6 +78,32 @@ export class IFCService {
         } catch (error) {
             console.error('Error loading IFC file:', error);
             throw error;
+        }
+    }
+
+    // private GetMaterialIndexByColor(ifcColor: WebIFC.Color) {
+    //     const color = RGBColorFromFloatComponents(ifcColor.x, ifcColor.y, ifcColor.z);
+    //     const alpha = Math.round(ifcColor.w * 255.0);
+    //     return this.colorToMaterial.GetMaterialIndex(color.r, color.g, color.b, alpha);
+    // }
+
+    private ImportIfcMesh(ifcMesh: any, modelId: number): void {
+        if (!this.ifcApi) {
+            return;
+        }
+        let mesh = new THREE.Mesh();
+        let vertexOffset = 0;
+        const ifcGeometries = ifcMesh.geometries;
+        for (let geometryIndex = 0; geometryIndex < ifcGeometries.size(); geometryIndex++) {
+            const ifcGeometry = ifcGeometries.get(geometryIndex);
+            const ifcGeometryData = this.ifcApi.GetGeometry(modelId, ifcGeometry.geometryExpressID);
+            const ifcVertices = this.ifcApi.GetVertexArray(ifcGeometryData.GetVertexData(), ifcGeometryData.GetVertexDataSize());
+            const ifcIndices = this.ifcApi.GetIndexArray(ifcGeometryData.GetIndexData(), ifcGeometryData.GetIndexDataSize());
+            //const materialIndex = this.GetMaterialIndexByColor(ifcGeometry.color);
+            const matrix = new THREE.Matrix4();
+            matrix.fromArray(ifcGeometry.flatTransformation);
+            //const transformation = new Transformation(matrix);
+            mesh.add()
         }
     }
 
