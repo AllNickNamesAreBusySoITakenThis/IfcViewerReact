@@ -8,6 +8,9 @@
 # testing
 /coverage
 
+# VS Code settings (uncomment if you don't want to commit them)
+# .vscode/
+
 # production
 /build
 

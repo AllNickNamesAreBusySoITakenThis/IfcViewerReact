@@ -1,0 +1,11 @@
+{
+    "typescript.preferences.includePackageJsonAutoImports": "on",
+    "debug.javascript.codelens.npmScripts": "never",
+    "debug.allowBreakpointsEverywhere": true,
+    "debug.javascript.breakOnConditionalError": true,
+    "debug.javascript.unmapMissingSources": true,
+    "debug.javascript.sourceMaps": true,
+    "javascript.preferences.includePackageJsonAutoImports": "on",
+    "typescript.suggest.autoImports": true,
+    "javascript.suggest.autoImports": true
+}

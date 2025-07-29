@@ -6,6 +6,8 @@ import { LocalIFCFile, IFCModel, LoadingState } from '../types/ifc.types';
 import './IFCApp.css';
 
 export const IFCApp: React.FC = () => {
+    console.log('IFCApp component initialized');
+
     const [selectedFile, setSelectedFile] = useState<LocalIFCFile | null>(null);
     const [currentModel, setCurrentModel] = useState<IFCModel | null>(null);
     const [loadingState, setLoadingState] = useState<LoadingState>({
