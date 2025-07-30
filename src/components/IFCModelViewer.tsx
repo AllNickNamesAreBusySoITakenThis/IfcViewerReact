@@ -4,6 +4,7 @@ import { OrbitControls, PerspectiveCamera, Grid } from '@react-three/drei';
 import * as THREE from 'three';
 import { IFCModel } from '../types/ifc.types';
 import './IFCModelViewer.css';
+import { WebIfcThreeModel } from './WebIfcThreeModel';
 
 interface IFCModelViewerProps {
     model: IFCModel | null;
@@ -84,13 +85,13 @@ const CameraController: React.FC<{ boundingBox: IFCModel['boundingBox'] }> = ({ 
 };
 
 export const IFCModelViewer: React.FC<IFCModelViewerProps> = ({ model }) => {
-    if (!model) {
-        return (
-            <div className="ifc-viewer-placeholder">
-                <p>Выберите IFC файл для отображения</p>
-            </div>
-        );
-    }
+    // if (!model) {
+    //     return (
+    //         <div className="ifc-viewer-placeholder">
+    //             <p>Выберите IFC файл для отображения</p>
+    //         </div>
+    //     );
+    // }
 
     return (
         <div className="ifc-viewer">
@@ -99,7 +100,7 @@ export const IFCModelViewer: React.FC<IFCModelViewerProps> = ({ model }) => {
                 camera={{ position: [10, 10, 10], fov: 50 }}
                 style={{ background: '#f0f0f0' }}
             >
-                <CameraController boundingBox={model.boundingBox} />
+                {/* <CameraController boundingBox={model.boundingBox} /> */}
 
                 {/* Освещение */}
                 <ambientLight intensity={0.4} />
@@ -113,15 +114,16 @@ export const IFCModelViewer: React.FC<IFCModelViewerProps> = ({ model }) => {
                 <pointLight position={[-10, -10, -10]} intensity={0.5} />
 
                 {/* Сетка */}
-                <Grid
+                {/* <Grid
                     args={[100, 100]}
                     position={[0, model.boundingBox.min.y - 1, 0]}
                     cellColor="#666666"
                     sectionColor="#888888"
-                />
+                /> */}
 
                 {/* 3D модель */}
-                <IFCMesh model={model} />
+                <WebIfcThreeModel />
+                {/* <IFCMesh model={model} /> */}
             </Canvas>
         </div>
     );
