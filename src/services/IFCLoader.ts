@@ -15,7 +15,6 @@ import {
     Color,
     Object3DEventMap,
 } from 'three';
-import { PlacedGeometry } from 'web-ifc/web-ifc-api';
 
 const ifcAPI = new WebIFC.IfcAPI();
 
@@ -74,7 +73,7 @@ class IFCLoader extends Loader {
     async parse(buffer: ArrayBuffer) {
 
         if (ifcAPI.wasmModule === undefined) {
-            ifcAPI.SetWasmPath("/", true);
+            ifcAPI.SetWasmPath("/wasm/v.0.70/", true);
             await ifcAPI.Init();
 
         }
@@ -83,7 +82,7 @@ class IFCLoader extends Loader {
         const modelID = ifcAPI.OpenModel(data, {
             COORDINATE_TO_ORIGIN: true,
             CIRCLE_SEGMENTS: 64,
-            MEMORY_LIMIT: 1024
+            MEMORY_LIMIT: 1024,
         });
         return loadAllGeometry(modelID);
 
@@ -110,7 +109,7 @@ class IFCLoader extends Loader {
 
         }
 
-        function getPlacedGeometry(modelID: number, placedGeometry: PlacedGeometry) {
+        function getPlacedGeometry(modelID: number, placedGeometry: WebIFC.PlacedGeometry) {
 
             const geometry = getBufferGeometry(modelID, placedGeometry);
             const material = getMeshMaterial(placedGeometry.color);
@@ -121,7 +120,7 @@ class IFCLoader extends Loader {
 
         }
 
-        function getBufferGeometry(modelID: number, placedGeometry: PlacedGeometry) {
+        function getBufferGeometry(modelID: number, placedGeometry: WebIFC.PlacedGeometry) {
 
             const geometry = ifcAPI.GetGeometry(
                 modelID,

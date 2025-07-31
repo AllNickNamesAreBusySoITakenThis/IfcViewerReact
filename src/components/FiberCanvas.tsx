@@ -11,6 +11,7 @@ export const FiberCanvas = () => {
                 flat={true}
                 linear={true}
             >
+                <ambientLight intensity={1} />
                 <GizmoHelper alignment="top-right" margin={[50, 120]}>
                     <GizmoViewcube hoverColor="#D9D9D9" />
                 </GizmoHelper>
@@ -25,6 +26,9 @@ export const FiberCanvas = () => {
                     maxZoom={20}
                 />
                 <FiberIfcModel path="/Standtmodell.ifc" />
+                {/* <FiberIfcModel path="/DGM_113533-114694km_IFC4.ifc" /> */}
+                {/* <FiberIfcModel path="/Modell georeferenziert.ifc" /> */}
+                {/* <FiberIfcModel path="/Sample IFC.ifc" /> */}
             </Canvas>
         </div>
     )
