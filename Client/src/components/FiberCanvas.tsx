@@ -20,14 +20,14 @@ export const FiberCanvas = () => {
 
     const onIFCError = useCallback((error: any) => {
         setIsLoading(false);
-        setError('Ошибка загрузки IFC файла: ' + (error?.message || 'Неизвестная ошибка'));
+        setError('Error loading IFC file: ' + (error?.message || 'Unknown error'));
     }, []);
     return (
         <div className="canvas-container">
             {isLoading && (
                 <div className="loading-overlay">
                     <div className="loading-spinner"></div>
-                    <span className="loading-text">Загрузка IFC модели...</span>
+                    <span className="loading-text">Loading IFC model...</span>
                 </div>
             )}
             {error && (

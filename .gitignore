@@ -238,3 +238,5 @@ project.lock.json
 
 # UWP Projects
 AppPackages/
+
+.fake
