@@ -18,12 +18,12 @@ export const FiberIfcModel = ({ path }: IComponentProps) => {
             loader.load(path, (loadedData) => {
                 setIfc(loadedData);
             }, (progressEvent) => {
-                console.log(progressEvent.total);
+                //console.log(progressEvent.total);
             }, (error) => {
-                console.error(error);
+                //console.error(error);
             })
         })();
-    });
+    }, [path]);
 
     if (!ifc) {
         return null;

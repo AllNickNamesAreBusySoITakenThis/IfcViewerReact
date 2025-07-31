@@ -1,6 +1,6 @@
 import { CameraControls, GizmoHelper, GizmoViewcube } from "@react-three/drei"
 import { Canvas } from "@react-three/fiber"
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { FiberIfcModel } from "./FiberIfcModel";
 
 export const FiberCanvas = () => {
@@ -25,9 +25,9 @@ export const FiberCanvas = () => {
                     minZoom={1}
                     maxZoom={20}
                 />
-                <FiberIfcModel path="/Standtmodell.ifc" />
+                {/* <FiberIfcModel path="/Standtmodell.ifc" /> */}
                 {/* <FiberIfcModel path="/DGM_113533-114694km_IFC4.ifc" /> */}
-                {/* <FiberIfcModel path="/Modell georeferenziert.ifc" /> */}
+                <FiberIfcModel path="/Modell georeferenziert.ifc" />
                 {/* <FiberIfcModel path="/Sample IFC.ifc" /> */}
             </Canvas>
         </div>
