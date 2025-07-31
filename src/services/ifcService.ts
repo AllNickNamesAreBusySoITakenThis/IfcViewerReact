@@ -1,7 +1,6 @@
 import * as WebIFC from 'web-ifc';
 import * as THREE from 'three';
 import { IFCModel, IFCGeometry } from '../types/ifc.types';
-import { RGBColorFromFloatComponents } from './serviceTools/ColorsTools';
 
 export class IFCService {
     private ifcApi: WebIFC.IfcAPI | null = null;

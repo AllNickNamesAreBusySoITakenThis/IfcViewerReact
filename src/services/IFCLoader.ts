@@ -71,7 +71,7 @@ class IFCLoader extends Loader {
     async parse(buffer: ArrayBuffer) {
 
         if (ifcAPI.wasmModule === undefined) {
-
+            ifcAPI.SetWasmPath("/", true);
             await ifcAPI.Init();
 
         }
