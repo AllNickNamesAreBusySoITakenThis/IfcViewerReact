@@ -39,9 +39,12 @@ class IFCLoader extends Loader {
         loader.setWithCredentials(scope.withCredentials);
         loader.load(
             url,
-            async function (buffer: any) {
+            async function (buffer) {
 
                 try {
+                    if (typeof buffer == 'string') {
+                        throw new Error('IFC files must be given as a buffer!');
+                    }
                     if (onLoad)
                         onLoad(await scope.parse(buffer));
 
@@ -77,7 +80,11 @@ class IFCLoader extends Loader {
         }
 
         const data = new Uint8Array(buffer);
-        const modelID = ifcAPI.OpenModel(data);
+        const modelID = ifcAPI.OpenModel(data, {
+            COORDINATE_TO_ORIGIN: true,
+            CIRCLE_SEGMENTS: 64,
+            MEMORY_LIMIT: 1024
+        });
         return loadAllGeometry(modelID);
 
         function loadAllGeometry(modelID: number) {
