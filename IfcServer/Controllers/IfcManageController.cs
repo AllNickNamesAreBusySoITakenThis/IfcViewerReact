@@ -29,16 +29,8 @@ namespace IfcServer.Controllers
                     return BadRequest("File ID is required");
                 }
 
-                // TODO: Implement your file retrieval logic here
-                // This could involve:
-                // - Validating the file ID format
-                // - Checking if the file exists in your storage (database, file system, cloud storage)
-                // - Retrieving file metadata and content
-                // - Applying any necessary authorization checks
-
-                // Example implementation (replace with your actual logic):
                 var filePath = await GetFilePathById(fileId);
-                
+
                 if (string.IsNullOrEmpty(filePath) || !System.IO.File.Exists(filePath))
                 {
                     _logger.LogWarning("File not found for ID: {FileId}", fileId);
@@ -64,7 +56,7 @@ namespace IfcServer.Controllers
         {
             // Get the base directory from appsettings.json
             var baseDirectory = _configuration["IfcFileDirectoryPath"];
-            
+
             if (string.IsNullOrEmpty(baseDirectory))
             {
                 _logger.LogError("IfcFileDirectoryPath is not configured in appsettings.json");
@@ -72,7 +64,7 @@ namespace IfcServer.Controllers
             }
 
             var filePath = Path.Combine(baseDirectory, $"{fileId}.ifc");
-            
+
             return await Task.FromResult(filePath);
         }
 

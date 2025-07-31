@@ -1,5 +1,17 @@
 # IFC Viewer
 
+Full-stack application for viewing IFC files with React client and ASP.NET Core server.
+
+## Features
+
+- 📁 IFC file loading and processing
+- 🎨 3D visualization with interactive controls
+- 🏗️ IFC file processing using WebIFC and web-ifc-three
+- 🔧 REST API for IFC file management
+- 🎯 Interactive 3D controls (rotation, scaling, panning)
+- 📐 Automatic camera positioning on model
+- 🎪 Gizmo for 3D space orientation
+
 Full-stack приложение для просмотра IFC файлов с клиентской частью на React и серверной частью на ASP.NET Core.
 
 ## Возможности
@@ -12,185 +24,184 @@ Full-stack приложение для просмотра IFC файлов с к
 - � Автоматическое позиционирование камеры на модель
 - 🎪 Gizmo для ориентации в 3D пространстве
 
-## Архитектура
+## Architecture
 
-Проект состоит из трёх основных частей:
+The project consists of three main parts:
 
 ### Client (React TypeScript)
-- **React 19** с TypeScript
-- **React Three Fiber** для 3D рендеринга
-- **Three.js** для 3D графики
-- **@react-three/drei** для дополнительных 3D компонентов
-- **WebIFC** для обработки IFC файлов
-- **web-ifc-three** для интеграции с Three.js
+- **React 19** with TypeScript
+- **React Three Fiber** for 3D rendering
+- **Three.js** for 3D graphics
+- **@react-three/drei** for additional 3D components
+- **WebIFC** for IFC file processing
+- **web-ifc-three** for Three.js integration
 
 ### IfcServer (ASP.NET Core)
 - **.NET 9.0** Web API
-- CORS поддержка для кроссдоменных запросов
-- OpenAPI/Swagger документация
-- REST API для управления IFC файлами
+- CORS support for cross-domain requests
+- OpenAPI/Swagger documentation
+- REST API for IFC file management
 
-## Установка и запуск
+## Installation and Setup
 
-### Требования
-- **Node.js** (версия 16+)
-- **Yarn** пакетный менеджер
-- **.NET 9.0 SDK** (для серверной части)
+### Requirements
+- **Node.js** (version 16+)
+- **Yarn** package manager
+- **.NET 9.0 SDK** (for server part)
 
-### 1. Клонирование и установка зависимостей
+### 1. Clone and install dependencies
 
 ```bash
-# Клонирование репозитория
+# Clone repository
 git clone <repository-url>
 cd IfcViewerReact
 
-# Установка зависимостей клиентской части
+# Install client dependencies
 cd Client
 yarn install
 ```
 
-### 2. Запуск клиентской части
+### 2. Run client application
 
 ```bash
 cd Client
 yarn start
 ```
 
-Приложение будет доступно по адресу http://localhost:3000
+Application will be available at http://localhost:3000
 
-### 3. Запуск серверной части (опционально)
+### 3. Run server (optional)
 
 ```bash
 cd IfcServer
 dotnet run
 ```
 
-API будет доступно по адресу https://localhost:7000 или http://localhost:5000
+API will be available at https://localhost:7000 or http://localhost:5000
 
-## Использование
+## Usage
 
-1. **Запуск**: Запустите клиентское приложение командой `yarn start` в папке `Client`
-2. **Просмотр**: Откройте http://localhost:3000 в браузере
-3. **3D просмотр**: IFC модель отображается автоматически с возможностью:
-   - **Вращения** (левая кнопка мыши + перетаскивание)
-   - **Масштабирования** (колесо мыши) 
-   - **Панорамирования** (правая кнопка мыши + перетаскивание)
-   - **Навигации** с помощью 3D Gizmo в правом верхнем углу
-4. **Автофокус**: Камера автоматически позиционируется на загруженную модель
+1. **Launch**: Run the client application with `yarn start` command in the `Client` folder
+2. **View**: Open http://localhost:3000 in your browser
+3. **3D Viewing**: IFC model displays automatically with the ability to:
+   - **Rotate** (left mouse button + drag)
+   - **Zoom** (mouse wheel) 
+   - **Pan** (right mouse button + drag)
+   - **Navigate** using 3D Gizmo in the top-right corner
+4. **Auto-focus**: Camera automatically positions on the loaded model
 
-## Структура проекта
+## Project Structure
 
 ```
 IfcViewerReact/
-├── Client/                      # React клиентское приложение
+├── Client/                      # React client application
 │   ├── src/
-│   │   ├── components/          # React компоненты
-│   │   │   ├── FiberCanvas.tsx  # Основной 3D Canvas
-│   │   │   ├── FiberIfcModel.tsx # Компонент IFC модели
-│   │   │   └── FiberCanvas.css  # Стили для 3D canvas
-│   │   ├── services/           # Бизнес-логика
-│   │   │   ├── IFCLoader.ts    # Загрузчик IFC файлов
-│   │   │   └── serviceTools/   # Вспомогательные инструменты
-│   │   │       └── tools.ts    # Утилиты
-│   │   ├── types/              # TypeScript типы
-│   │   │   └── ifc.types.ts    # Типы для IFC данных
-│   │   ├── App.tsx             # Главный компонент приложения
-│   │   └── index.tsx           # Точка входа
+│   │   ├── components/          # React components
+│   │   │   ├── FiberCanvas.tsx  # Main 3D Canvas
+│   │   │   ├── FiberIfcModel.tsx # IFC model component
+│   │   │   └── FiberCanvas.css  # 3D canvas styles
+│   │   ├── services/           # Business logic
+│   │   │   ├── IFCLoader.ts    # IFC file loader
+│   │   │   └── serviceTools/   # Helper tools
+│   │   │       └── tools.ts    # Utilities
+│   │   ├── types/              # TypeScript types
+│   │   │   └── ifc.types.ts    # IFC data types
+│   │   ├── App.tsx             # Main application component
+│   │   └── index.tsx           # Entry point
 │   ├── public/
-│   │   ├── wasm/               # WebAssembly файлы для WebIFC
-│   │   │   ├── v.0.41/         # Версия 0.41
-│   │   │   └── v.0.70/         # Версия 0.70 (текущая)
-│   │   └── index.html          # HTML шаблон
-│   ├── build/                  # Сборка продакшн версии
-│   └── package.json            # Зависимости и скрипты
+│   │   ├── wasm/               # WebAssembly files for WebIFC
+│   │   │   ├── v.0.41/         # Version 0.41
+│   │   │   └── v.0.70/         # Version 0.70 (current)
+│   │   └── index.html          # HTML template
+│   ├── build/                  # Production build
+│   └── package.json            # Dependencies and scripts
 ├── IfcServer/                  # ASP.NET Core Web API
-│   ├── Controllers/            # API контроллеры
-│   │   ├── IfcManageController.cs # Управление IFC файлами
-│   │   └── WeatherForecastController.cs # Пример контроллера
-│   ├── Helpers/               # Вспомогательные классы
-│   │   └── IfcManageHelper.cs # Помощник для работы с IFC
+│   ├── Controllers/            # API controllers
+│   │   ├── IfcManageController.cs # IFC file management
+│   │   └── WeatherForecastController.cs # Example controller
+│   ├── Helpers/               # Helper classes
+│   │   └── IfcManageHelper.cs # IFC helper
 │   ├── Properties/
-│   │   └── launchSettings.json # Настройки запуска
-│   ├── Program.cs             # Точка входа приложения
-│   └── IfcServer.csproj       # Конфигурация проекта
-├── Server/                    # Резерв для дополнительных серверных компонентов
-└── README.md                  # Документация проекта
+│   │   └── launchSettings.json # Launch settings
+│   ├── Program.cs             # Application entry point
+│   └── IfcServer.csproj       # Project configuration
+└── README.md                  # Project documentation
 ```
 
-## Технические детали
+## Technical Details
 
-### Клиентская часть
-- **WebIFC версия**: 0.0.70
-- **Three.js версия**: 0.178.0
+### Client Side
+- **WebIFC version**: 0.0.70
+- **Three.js version**: 0.178.0
 - **React Three Fiber**: 9.1.4
-- **@react-three/drei**: 10.6.1 (для CameraControls, GizmoHelper)
+- **@react-three/drei**: 10.6.1 (for CameraControls, GizmoHelper)
 - **TypeScript**: 4.9.5
 
-### Серверная часть
+### Server Side
 - **.NET Framework**: 9.0
-- **OpenAPI/Swagger**: для документации API
-- **CORS**: настроен для кроссдоменных запросов
+- **OpenAPI/Swagger**: for API documentation
+- **CORS**: configured for cross-domain requests
 
 ### WebAssembly
-- Поддержка **web-ifc-mt.wasm** (многопоточная версия)
-- Файлы WASM расположены в `/public/wasm/v.0.70/`
-- Автоматическая инициализация WebIFC при загрузке
+- Support for **web-ifc-mt.wasm** (multithreaded version)
+- WASM files located in `/public/wasm/v.0.70/`
+- Automatic WebIFC initialization on load
 
-## Поддерживаемые файлы
+## Supported Files
 
-- **Формат**: .ifc файлы (Industry Foundation Classes)
-- **Версии IFC**: Поддерживаются стандартные версии IFC
-- **Обработка**: Клиентская (в браузере) с использованием WebAssembly
-- **3D рендеринг**: Автоматическое преобразование IFC геометрии в Three.js меши
+- **Format**: .ifc files (Industry Foundation Classes)
+- **IFC Versions**: Standard IFC versions supported
+- **Processing**: Client-side (in browser) using WebAssembly
+- **3D Rendering**: Automatic conversion of IFC geometry to Three.js meshes
 
 ## API Endpoints
 
 ### IFC Management API
-- `GET /IfcManage/getIfcFile/{fileId}` - Получение IFC файла по ID
-- Дополнительные endpoints определены в `IfcManageController.cs`
+- `GET /IfcManage/getIfcFile/{fileId}` - Get IFC file by ID
+- Additional endpoints defined in `IfcManageController.cs`
 
-## Скрипты
+## Scripts
 
-### Клиентская часть (Client/)
+### Client Side (Client/)
 ```bash
-yarn start          # Запуск в режиме разработки
-yarn build          # Сборка для продакшена  
-yarn test           # Запуск тестов
-yarn eject          # Извлечение конфигурации (необратимо)
+yarn start          # Run in development mode
+yarn build          # Build for production  
+yarn test           # Run tests
+yarn eject          # Extract configuration (irreversible)
 ```
 
-### Серверная часть (IfcServer/)
+### Server Side (IfcServer/)
 ```bash
-dotnet run          # Запуск API сервера
-dotnet build        # Сборка проекта
-dotnet test         # Запуск тестов (если есть)
+dotnet run          # Run API server
+dotnet build        # Build project
+dotnet test         # Run tests (if any)
 ```
 
-## Возможные проблемы и решения
+## Common Issues and Solutions
 
-### 1. Ошибка "THREE.Material: parameter 'color' has value of undefined"
-Это происходит при неправильной обработке цветов из IFC файла. Убедитесь, что цвета правильно извлекаются из PlacedGeometry.
+### 1. Error "THREE.Material: parameter 'color' has value of undefined"
+This occurs when colors from IFC file are processed incorrectly. Make sure colors are properly extracted from PlacedGeometry.
 
-### 2. Ошибка "'Color.ts' cannot be compiled under '--isolatedModules'"
-Добавьте `export {}` в конец файла Color.ts, чтобы сделать его модулем.
+### 2. Error "'Color.ts' cannot be compiled under '--isolatedModules'"
+Add `export {}` at the end of Color.ts file to make it a module.
 
-### 3. Проблемы с загрузкой WASM файлов
-Убедитесь, что WASM файлы находятся в правильной директории `/public/wasm/v.0.70/` и доступны по HTTP.
+### 3. WASM file loading issues
+Make sure WASM files are in the correct directory `/public/wasm/v.0.70/` and accessible via HTTP.
 
-### 4. CORS ошибки при работе с API
-Проверьте настройки CORS в `Program.cs` серверной части.
+### 4. CORS errors when working with API
+Check CORS settings in server's `Program.cs`.
 
-## Пакетный менеджер
+## Package Manager
 
-Проект использует **Yarn** в качестве пакетного менеджера. Убедитесь, что у вас установлен Yarn:
+The project uses **Yarn** as package manager. Make sure you have Yarn installed:
 
 ```bash
 npm install -g yarn
 ```
 
-## Лицензия
+## License
 
-Проект использует следующие лицензии:
+The project uses the following licenses:
 - **Three.js**: MIT License
 - **React**: MIT License  
 - **WebIFC**: MIT License
