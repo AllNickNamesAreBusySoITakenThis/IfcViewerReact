@@ -1,0 +1,31 @@
+@IfcServer_HostAddress = http://localhost:5064
+
+# Weather Forecast Controller
+GET {{IfcServer_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
+
+# IFC Manage Controller - Get IFC File by ID
+GET {{IfcServer_HostAddress}}/IfcManage/getIfcFile/sample-file-id
+Accept: application/octet-stream
+
+###
+
+# IFC Manage Controller - Get IFC File by ID (example with different file ID)
+GET {{IfcServer_HostAddress}}/IfcManage/getIfcFile/1
+Accept: application/octet-stream
+
+###
+
+# IFC Manage Controller - Test with invalid file ID (should return 404)
+GET {{IfcServer_HostAddress}}/IfcManage/getIfcFile/non-existent-file
+Accept: application/octet-stream
+
+###
+
+# IFC Manage Controller - Test with empty file ID (should return 400)
+GET {{IfcServer_HostAddress}}/IfcManage/getIfcFile/
+Accept: application/octet-stream
+
+###
