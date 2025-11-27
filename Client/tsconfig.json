@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "ESNext",
     "lib": [
       "dom",
       "dom.iterable",
@@ -14,14 +14,18 @@
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
     "module": "esnext",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
     "sourceMap": true,
     "inlineSourceMap": false,
-    "inlineSources": false
+    "inlineSources": false,
+    "types": [
+      "vite/client",
+      "vite-plugin-svgr/client"
+    ]
   },
   "include": [
     "src"

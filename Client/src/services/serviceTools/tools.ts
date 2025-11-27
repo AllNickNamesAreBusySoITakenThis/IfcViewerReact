@@ -1,5 +1,5 @@
 export const getApiUrl = (path: string): string => {
-    const baseUrl = process.env.API_BASE_URL || 'https://localhost:7247/';
+    const baseUrl = import.meta.env.VITE_API_BASE_URL || 'https://localhost:7247/';
     return `${baseUrl}${path}`;
 }
 
