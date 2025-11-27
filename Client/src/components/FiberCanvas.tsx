@@ -57,7 +57,7 @@ export const FiberCanvas = () => {
                 />
                 {/* <FiberIfcModel path="/Standtmodell.ifc" /> */}
                 {/* <FiberIfcModel path="/DGM_113533-114694km_IFC4.ifc" /> */}
-                <FiberIfcModel fileId="4" onLoaded={onIFCLoaded} onError={onIFCError} />
+                <FiberIfcModel fileId="1" onLoaded={onIFCLoaded} onError={onIFCError} />
                 {/* <FiberIfcModel path="/Sample IFC.ifc" /> */}
             </Canvas>
         </div>

@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.7" />
+    <PackageReference Include="Xbim.Ifc" Version="6.0.521" />
   </ItemGroup>
 
 </Project>

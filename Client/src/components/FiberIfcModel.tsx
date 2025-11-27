@@ -22,7 +22,7 @@ export const FiberIfcModel = ({ fileId, onLoaded, onError }: IComponentProps) =>
                 setIfc(loadedData);
                 onLoaded(loadedData);
             }, (progressEvent) => {
-                //console.log(progressEvent.total);
+                console.log(progressEvent.total);
             }, (error) => {
                 console.error(error);
                 if (onError) {

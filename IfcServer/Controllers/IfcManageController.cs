@@ -1,5 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Xbim.Ifc;
+using Xbim.Ifc4.Interfaces;
+using Xbim.Common.Geometry;
+using Xbim.Ifc4.Kernel;
+using IfcServer.Models;
 
 namespace IfcServer.Controllers
 {
@@ -37,6 +42,77 @@ namespace IfcServer.Controllers
                     return NotFound($"File with ID '{fileId}' not found");
                 }
 
+                using (var model = IfcStore.Open(filePath))
+                {
+                    var txn = model.BeginTransaction("Translate to Origin");
+
+                    // Получаем объект IfcSite (корень координат)
+                    var site = model.Instances.OfType<IIfcSite>().FirstOrDefault();
+                    if (site == null)
+                    {
+                        Console.WriteLine("IfcSite не найден.");
+                    }
+
+                    var crsRef = model.Instances.OfType<IIfcCoordinateReferenceSystem>().FirstOrDefault();
+                    var crs = model.Instances.OfType<IIfcProjectedCRS>().FirstOrDefault();
+                    var epsgCode = 0;
+                    if (crs != null)
+                    {
+                        epsgCode = GetEpsgCode(crs.Name);
+                    }
+                    var mapConversion = model.Instances.OfType<IIfcMapConversion>().FirstOrDefault();
+                    var easting = 0.0;
+                    var northing = 0.0;
+                    if(mapConversion != null)
+                    {
+                        easting = mapConversion.Eastings;
+                        northing = mapConversion.Northings;
+                    }
+
+                    var zeroPointInBaseCRS = new GeoLocation
+                    {
+                        Latitude = northing,
+                        Longitude = easting
+                    };
+
+                    // Получаем текущее смещение (Offset) сайта
+                    var sitePlacement = site.ObjectPlacement as IIfcLocalPlacement;
+                    
+                    var axisPlacement = sitePlacement?.RelativePlacement as IIfcAxis2Placement3D;
+
+                    if (axisPlacement == null)
+                    {
+                        Console.WriteLine("Размещение сайта не определено.");
+                    }
+
+                    // Получаем координаты смещения
+                    double x = axisPlacement.Location.X;
+                    double y = axisPlacement.Location.Y;
+                    double z = axisPlacement.Location.Z;
+
+                    // Вычисляем обратный вектор смещения
+                    var translation = new XbimVector3D(-x, -y, -z);
+
+                    //// Перемещаем все продукты (объекты) модели
+                    //foreach (var prod in model.Instances.OfType<IIfcProduct>())
+                    //{
+                    //    var placement = prod.ObjectPlacement as IIfcLocalPlacement;
+                    //    var axis = placement?.RelativePlacement as IIfcAxis2Placement3D;
+                    //    if (axis != null)
+                    //    {
+                    //        axis.Location.X += translation.X;
+                    //        axis.Location.Y += translation.Y;
+                    //        axis.Location.Z += translation.Z;
+                    //    }
+                    //}
+
+                    //txn.Commit();
+
+                    //// Сохраняем изменённый IFC в новый файл
+                    //model.SaveAs("output_to_origin.ifc");
+                    //Console.WriteLine("Модель успешно сдвинута к началу координат и сохранена.");
+                }
+
                 var fileBytes = await System.IO.File.ReadAllBytesAsync(filePath);
                 var fileName = Path.GetFileName(filePath);
                 var contentType = GetContentType(fileName);
@@ -49,6 +125,39 @@ namespace IfcServer.Controllers
             {
                 _logger.LogError(ex, "Error retrieving file with ID: {FileId}", fileId);
                 return StatusCode(500, "An error occurred while retrieving the file");
+            }
+        }
+
+        private int GetEpsgCode(string crsName)
+        {
+            try
+            {
+                var sbst = crsName.ToLower().Substring(crsName.ToLower().IndexOf("epsg") + 4);
+                string code = "";
+                foreach (var item in sbst)
+                {
+                    if (Char.IsDigit(item))
+                    {
+                        code += item;
+                    }
+                    else if (Char.IsPunctuation(item))
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+                if(int.TryParse(code, out var epsg))
+                {
+                    return epsg;
+                }
+                return -1;
+            }
+            catch
+            {
+                return -1;                
             }
         }
 

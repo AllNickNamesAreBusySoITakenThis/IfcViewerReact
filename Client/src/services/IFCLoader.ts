@@ -24,6 +24,24 @@ class IFCLoader extends Loader {
         super(manager);
     }
 
+    // async loadAsync(url: string, onProgress?: (event: ProgressEvent) => void): Promise<Object3D<Object3DEventMap>> {
+    //     const scope = this;
+
+    //     const loader = new FileLoader(scope.manager);
+    //     loader.setPath(scope.path);
+    //     loader.setResponseType('arraybuffer');
+    //     loader.setRequestHeader(scope.requestHeader);
+    //     loader.setWithCredentials(scope.withCredentials);
+
+    //     const arrayBuffer = await loader.loadAsync(url, onProgress);
+    //     if (typeof arrayBuffer === 'string') {
+    //         throw new Error('IFC files must be given as a buffer!');
+    //     }
+    //     // eslint-disable-next-line no-console
+    //     console.log('ArrayBuffer received');
+    //     return await scope.parse(arrayBuffer);
+    // }
+
     load(url: string,
         onLoad?: (data: Object3D<Object3DEventMap>) => void,
         onProgress?: (event: ProgressEvent) => void,
@@ -41,25 +59,20 @@ class IFCLoader extends Loader {
             async function (buffer) {
 
                 try {
-                    if (typeof buffer == 'string') {
+                    if (typeof buffer === 'string') {
                         throw new Error('IFC files must be given as a buffer!');
                     }
                     if (onLoad)
-                        onLoad(await scope.parse(buffer));
+                        onLoad(await scope.parse(buffer, onError));
 
                 } catch (e) {
 
                     if (onError) {
-
                         onError(e);
-
                     } else {
-
                         console.error(e);
-
                     }
-
-                    scope.manager.itemError(url);
+                    //scope.manager.itemError(url);
 
                 }
 
@@ -70,7 +83,7 @@ class IFCLoader extends Loader {
 
     }
 
-    async parse(buffer: ArrayBuffer) {
+    async parse(buffer: ArrayBuffer, onError?: (error: any) => void) {
 
         if (ifcAPI.wasmModule === undefined) {
             ifcAPI.SetWasmPath("/wasm/v.0.70/", true);
@@ -80,38 +93,56 @@ class IFCLoader extends Loader {
 
         const data = new Uint8Array(buffer);
         const modelID = ifcAPI.OpenModel(data, {
-            COORDINATE_TO_ORIGIN: true,
+            COORDINATE_TO_ORIGIN: false,
             CIRCLE_SEGMENTS: 64,
-            MEMORY_LIMIT: 1024,
+            MEMORY_LIMIT: 2096,
         });
-        return loadAllGeometry(modelID);
+        return loadAllGeometry(modelID, onError);
 
-        function loadAllGeometry(modelID: number) {
+        function loadAllGeometry(modelId: number, onErrorHandler?: (error: any) => void) {
+            // const flatMeshes = getFlatMeshes(modelId);
+            // const mainObject = new Object3D();
+            // for (let i = 0; i < flatMeshes.size(); i++) {
 
-            const flatMeshes = getFlatMeshes(modelID);
-            const mainObject = new Object3D();
-            for (let i = 0; i < flatMeshes.size(); i++) {
+            //     const placedGeometries = flatMeshes.get(i).geometries;
+            //     for (let j = 0; j < placedGeometries.size(); j++)
+            //         mainObject.add(getPlacedGeometry(modelId, placedGeometries.get(j)));
 
-                const placedGeometries = flatMeshes.get(i).geometries;
-                for (let j = 0; j < placedGeometries.size(); j++)
-                    mainObject.add(getPlacedGeometry(modelID, placedGeometries.get(j)));
+            // }
 
+            // return mainObject;
+            try {
+                const flatMeshes = getFlatMeshes(modelId);
+                const mainObject = new Object3D();
+                for (let i = 0; i < flatMeshes.size(); i++) {
+
+                    const placedGeometries = flatMeshes.get(i).geometries;
+                    for (let j = 0; j < placedGeometries.size(); j++)
+                        mainObject.add(getPlacedGeometry(modelId, placedGeometries.get(j)));
+
+                }
+
+                return mainObject;
             }
-
-            return mainObject;
+            catch (e) {
+                if (onErrorHandler) {
+                    onErrorHandler(e);
+                }
+                return new Object3D();
+            }
 
         }
 
-        function getFlatMeshes(modelID: number) {
+        function getFlatMeshes(modelId: number) {
 
-            const flatMeshes = ifcAPI.LoadAllGeometry(modelID);
+            const flatMeshes = ifcAPI.LoadAllGeometry(modelId);
             return flatMeshes;
 
         }
 
-        function getPlacedGeometry(modelID: number, placedGeometry: WebIFC.PlacedGeometry) {
+        function getPlacedGeometry(modelId: number, placedGeometry: WebIFC.PlacedGeometry) {
 
-            const geometry = getBufferGeometry(modelID, placedGeometry);
+            const geometry = getBufferGeometry(modelId, placedGeometry);
             const material = getMeshMaterial(placedGeometry.color);
             const mesh = new Mesh(geometry, material);
             mesh.matrix = getMeshMatrix(placedGeometry.flatTransformation);
@@ -120,10 +151,10 @@ class IFCLoader extends Loader {
 
         }
 
-        function getBufferGeometry(modelID: number, placedGeometry: WebIFC.PlacedGeometry) {
+        function getBufferGeometry(modelId: number, placedGeometry: WebIFC.PlacedGeometry) {
 
             const geometry = ifcAPI.GetGeometry(
-                modelID,
+                modelId,
                 placedGeometry.geometryExpressID
             );
             const verts = ifcAPI.GetVertexArray(
@@ -182,6 +213,6 @@ class IFCLoader extends Loader {
     setWasmPath(path: string) {
         ifcAPI.SetWasmPath(path);
     }
-};
+}
 
 export { IFCLoader };
