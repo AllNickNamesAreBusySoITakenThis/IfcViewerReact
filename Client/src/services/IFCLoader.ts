@@ -80,7 +80,6 @@ class IFCLoader extends Loader {
             onProgress,
             onError
         );
-
     }
 
     async parse(buffer: ArrayBuffer, onError?: (error: any) => void) {
